@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Download PDF') {
+            steps {
+                script {
+                    // Public endpoint that provides a PDF file
+                    def pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
+
+                    // Download the PDF using curl
+                    sh "curl -o sample.pdf ${pdfUrl}"
+                }
+            }
+        }
+
+        stage('Archive PDF') {
+            steps {
+                // Archive the downloaded PDF as an artifact
+                archiveArtifacts artifacts: 'sample.pdf', allowEmptyArchive: false
+            }
+        }
+    }
+
+    post {
+        success {
+            // Print out the link to the archived PDF in the Jenkins console
+            echo "PDF file is available at: ${env.BUILD_URL}artifact/sample.pdf"
+        }
+    }
+}
