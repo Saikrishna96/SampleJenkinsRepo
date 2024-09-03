@@ -29,6 +29,8 @@ pipeline {
         success {
             // Print out the link to the archived PDF in the Jenkins console
             echo "Statement generated available at: ${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf"
+
+            echo "PDF file (${params.PDF_NAME}.pdf) is available at: ${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf"
         }
     }
 }
