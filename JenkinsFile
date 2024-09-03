@@ -27,13 +27,10 @@ pipeline {
 
     post {
         success {
-            // Print out the link to the archived PDF in the Jenkins console
-            echo "Statement generated available at: ${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf"
-
-            echo "PDF file (${params.PDF_NAME}.pdf) is available at: ${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf"
-
-            // Print out the PDF name as a clickable link
-            echo "PDF file is available: <a href=\"${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf\">${params.PDF_NAME}.pdf</a>"
+           script {
+                // Set the build description with a clickable link
+                currentBuild.description = "<a href=\"${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf\">${params.PDF_NAME}.pdf</a>"
+            }
         }
     }
 }
