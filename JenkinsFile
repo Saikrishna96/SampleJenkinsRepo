@@ -1,6 +1,9 @@
 pipeline {
     agent any
 
+    parameters {
+            string(name: 'PDF_NAME', defaultValue: 'sample', description: 'Name of the PDF file to be downloaded and archived')
+        }
     stages {
         stage('Download PDF') {
             steps {
@@ -8,16 +11,16 @@ pipeline {
                     // Public endpoint that provides a PDF file
                     def pdfUrl = 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'
 
-                    // Download the PDF using curl
-                    sh "curl -o sample.pdf ${pdfUrl}"
+                    // Download the PDF using curl, and name it based on the input parameter
+                    sh "curl -o ${params.PDF_NAME}.pdf ${pdfUrl}"
                 }
             }
         }
 
         stage('Archive PDF') {
             steps {
-                // Archive the downloaded PDF as an artifact
-                archiveArtifacts artifacts: 'sample.pdf', allowEmptyArchive: false
+                // Archive the downloaded PDF with the dynamic name as an artifact
+                archiveArtifacts artifacts: "${params.PDF_NAME}.pdf", allowEmptyArchive: false
             }
         }
     }
@@ -25,7 +28,7 @@ pipeline {
     post {
         success {
             // Print out the link to the archived PDF in the Jenkins console
-            echo "PDF file is available at: ${env.BUILD_URL}artifact/sample.pdf"
+            echo "Statement generated available at: ${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf"
         }
     }
 }
