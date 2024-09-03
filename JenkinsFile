@@ -27,10 +27,7 @@ pipeline {
 
     post {
         success {
-           script {
-                // Set the build description with a clickable link
-                currentBuild.description = "<a href=\"${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf\">${params.PDF_NAME}.pdf</a>"
-            }
+          echo "PDF file is available at: ${env.BUILD_URL}artifact/${params.PDF_NAME}.pdf"
         }
     }
 }
